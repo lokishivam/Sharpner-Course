@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Restaurant Food Order System</h1>
+    <form onsubmit="formSubmitHandler(event)">
+      <label for="dish">Dish</label>
+      <input type="text" id="dish" name="dish" />
+      <label for="price">Price</label>
+      <input type="text" id="price" name="price" />
+      <label for="table">Choose Table</label>
+      <select id="tableOptions" name="tableOptions">
+        <option value="table1">Table 1</option>
+        <option value="table2">Table 2</option>
+        <option value="table3">Table 3</option>
+      </select>
+      <input type="submit" value="Add to bill" />
+    </form>
+
+    <div id="orders">
+      <h2>Orders</h2>
+      <h2>table 1</h2>
+      <ul id="table1"></ul>
+      <h2>table 2</h2>
+      <ul id="table2"></ul>
+      <h2>table 3</h2>
+      <ul id="table3"></ul>
+    </div>
+
+    <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </body>
+</html>
