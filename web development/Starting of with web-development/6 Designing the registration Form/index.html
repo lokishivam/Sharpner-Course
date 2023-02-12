@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="index.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Booking Appointment</h1>
+      </div>
+      <form onsubmit="formSubmitHandler(event)">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" />
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" />
+        <label for="phone">Phone</label>
+        <input type="text" id="phone" name="phone" />
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" />
+        <label for="time">Time</label>
+        <input type="time" id="time" name="time" />
+        <input
+          type="submit"
+          value="Submit"
+          style="margin-top: 10px; background: brown"
+        />
+        <!--name is important in getting the values of form elements using events-->
+      </form>
+    </div>
+    <script>
+      function formSubmitHandler(event) {
+        event.preventDefault();
+        console.log(event.target.name.value);
+        console.log(event.target.email.value);
+        console.log(event.target.phone.value);
+        console.log(event.target.date.value);
+        console.log(event.target.time.value);
+      }
+    </script>
+  </body>
+</html>

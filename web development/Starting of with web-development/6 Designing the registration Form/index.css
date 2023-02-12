@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  background-image: url("terence-burke-ugJ5DkR8S_o-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+} /*
+No, by default the flex properties are not inherited by the child elements within a flex container. 
+The flex properties only apply to the direct children of a flex con
+*/
+
+.container {
+  margin-top: 60px;
+  backdrop-filter: blur(3px);
+  /* border: 2px solid orange; */
+  width: 600px;
+  height: 400px;
+}
+
+.header {
+  width: inherit;
+  height: 100px;
+  position: relative;
+}
+.header h1 {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+/* In CSS, the position property determines the type of positioning used for an element.
+   When you set an element to position: relative, it means that the element will be positioned relative to
+    its normal position in the flow of the document. This means that any top, right, bottom,
+     or left properties you specify for the element will be applied relative to its normal position.
+
+On the other hand, when you set an element to position: absolute, 
+it means that the element will be positioned relative to the nearest positioned ancestor element 
+(i.e., an ancestor element with a position value of relative, absolute, or fixed).
+ If there is no positioned ancestor element, the element will be positioned relative to the initial containing block,
+  which is typically the body element.
+
+In the previous code, we set the parent element to position: 
+relative so that it becomes the nearest positioned ancestor for the child element. */
+
+label {
+  margin-top: 10px;
+  display: block;
+}
+input {
+  display: block;
+  width: 400px;
+  color: #000000;
+  background: #abb2b3;
+}
+
+form {
+  margin-left: 20px;
+  color: #e2f30f;
+}
