@@ -17,6 +17,10 @@ orders.addEventListener("click", (e) => {
 });
 
 function formSubmitHandler(e) {
+  //1. get data from the form
+  //2. pass it to server endpoint which will return the object with _id
+  //3. create the li and add the obj details in it
+
   //here clicking on submit is clicking on form, so target is form itself
   e.preventDefault();
   const obj = {
@@ -37,6 +41,7 @@ function formSubmitHandler(e) {
 }
 
 function displayOrder(obj) {
+  //we have kept the table's value similar to table ul
   const ul = document.getElementById(obj.table);
   const li = document.createElement("li");
   li.id = obj._id;
