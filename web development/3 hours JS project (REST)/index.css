@@ -1,0 +1,28 @@
+label {
+  margin-top: 10px;
+  display: block;
+}
+
+input select {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.container {
+  border: 1px solid black;
+  width: 500px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #ee82ee69;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(137, 43, 226, 0.655);
+}
+
+#order {
+  color: navy;
+}

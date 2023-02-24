@@ -25,6 +25,7 @@ The flex properties only apply to the direct children of a flex con
   height: 100px;
   position: relative;
 }
+
 .header h1 {
   position: absolute;
   top: 20px;
@@ -50,7 +51,8 @@ label {
   margin-top: 10px;
   display: block;
 }
-input {
+
+input select {
   display: block;
   width: 400px;
   color: #000000;

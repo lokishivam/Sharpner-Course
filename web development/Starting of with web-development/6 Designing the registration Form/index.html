@@ -34,7 +34,8 @@
     <script>
       function formSubmitHandler(event) {
         event.preventDefault();
-        console.log(event.target.name.value);
+        console.log(event.target); //returns the target element.
+        console.log(event.target.name.value); //event is form submission, target is form
         console.log(event.target.email.value);
         console.log(event.target.phone.value);
         console.log(event.target.date.value);

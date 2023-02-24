@@ -98,7 +98,7 @@
 // }
 
 // fun.apply(obj, [3, 4, 5]);
-//Ans: 'apply' will help the parameters.
+// //Ans: 'apply' will help the parameters.
 
 // //--------------------------------
 // var obj = {
@@ -109,6 +109,7 @@
 //   console.log(this.val + a + b + c);
 // }
 
-// const fun2 = fun().bind(obj);
+// const fun2 = fun.bind(obj);
 
 // fun2(1, 2, 3);
+//Ans: 106
