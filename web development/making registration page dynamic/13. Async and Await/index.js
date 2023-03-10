@@ -58,9 +58,9 @@ const premovie = async () => {
     resolve(`husband brings coke`);
   });
 
-  let ticket; //as we use await we dont need to use .then
+  let ticket; 
+  //as we use await we dont need to use .then
   //the promise returns the value of resolve..
-
   try {
     ticket = await wifeBringingTickets;
   } catch {

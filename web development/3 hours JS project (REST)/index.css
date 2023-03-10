@@ -13,14 +13,14 @@ input select {
   width: 500px;
   padding: 20px;
   margin-top: 20px;
-  background-color: #ee82ee69;
+  background-color: #da41da69;
 }
 
 body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(137, 43, 226, 0.655);
+  background: rgba(200, 129, 202, 0.655);
 }
 
 #order {
