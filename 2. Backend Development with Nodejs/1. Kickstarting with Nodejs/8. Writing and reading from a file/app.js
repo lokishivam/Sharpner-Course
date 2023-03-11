@@ -1,3 +1,6 @@
+//https://github.com/lokishivam/Sharpner-Course/commit/35a6fcafd6742f46d050129d80e769d415c18e42
+//reffer the above link for part 1
+
 const http = require("http");
 const fs = require("fs");
 
@@ -23,23 +26,25 @@ const server = http.createServer((req, res) => {
   if (url === "/message" && method === "POST") {
     //the data we recieve from the post request comes in packets for quick travel.
     //res.on is an event listner that we explicitly add in node.js
-    //'data' event is emitted whenever a packet is arrived.
+    //'data' event is emitted whenever a packet is arrived so it will be called multiple times depending on size and packets.
     //we will collect all the chucks in array.
 
     const arr = [];
-    let resdata = "";
     req.on("data", (chunk) => {
       arr.push(chunk);
     });
+
     req.on("end", () => {
-      resdata = arr.toString(); //get complete data
+      const parsedBody = Buffer.concat(arr).toString();
+      const resdata = parsedBody.split("=")[1];
       console.log(resdata);
+      fs.writeFileSync("message.txt", resdata);
     });
-    //as js is async the below code will run before the resdata is updated.
-    fs.writeFileSync("message.txt", resdata);
     res.statusCode = 302; //we redirect our response on '/'
-    res.setHeader("location", "/");
+    res.setHeader("Location", "/");
+
     return res.end();
+    //as js is async the below code will run before the resdata is updated.
   }
 
   res.setHeader("content-type", "text/html");
