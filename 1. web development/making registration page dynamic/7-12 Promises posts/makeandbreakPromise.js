@@ -1,6 +1,6 @@
 const blogs = [];
 
-
+//Do not touch these functions below at all
 function create1stBlog() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -10,7 +10,7 @@ function create1stBlog() {
   });
 }
 
-
+//Do not touch these functions below at all
 function create2ndBlog() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
