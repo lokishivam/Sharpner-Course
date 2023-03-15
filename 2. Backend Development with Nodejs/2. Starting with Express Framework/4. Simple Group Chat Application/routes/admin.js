@@ -6,15 +6,10 @@ const fs = require("fs");
 
 router.get("/login", (req, res, next) => {
   res.send(`
-<form action = '/' onsubmit = "submitHandler(event)">
+<form action = '/' onsubmit = "localStorage.setItem("username", event.target.username.value);">
     <input type = "text" name = "username">
     <input type = 'submit' value = 'submit'>
 </form>
-<script>
-function submitHandler(event) { 
-    localStorage.setItem("username", event.target.username.value);
-  }
-  </script>
 `);
   //1. onsubmit will run first before form is submitted
   //2. Do not write event.preventDefault(); this not allow the form to redirect.
