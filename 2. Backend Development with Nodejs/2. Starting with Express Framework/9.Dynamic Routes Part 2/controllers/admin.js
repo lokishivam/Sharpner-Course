@@ -1,5 +1,4 @@
 const Product = require("../models/product");
-const Cart = require("../models/cart");
 
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/add-product", {
@@ -28,17 +27,5 @@ exports.getProducts = (req, res, next) => {
       pageTitle: "Admin Products",
       path: "/admin/products",
     });
-  });
-};
-
-exports.postCart = (req, res, next) => {
-  const productId = req.body.id;
-  console.log(productId);
-  //findById will get the desired product, only after that it will run the callback.
-  //The callback that we send will use the product found by findById
-  Product.findById(productId, (product) => {
-    console.log(product.price);
-    Cart.addProduct(productId, product.price);
-    res.redirect("/cart");
   });
 };
