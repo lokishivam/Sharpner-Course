@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Cart = require("../models/cart");
 
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
@@ -61,7 +62,7 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll((products) => {
+  Product.fetchAll().then(([products, feildData]) => {
     res.render("admin/products", {
       prods: products,
       pageTitle: "Admin Products",
@@ -72,6 +73,8 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId);
-  res.redirect("/admin/products");
+  Product.deleteById(prodId).then(([product]) => {
+    Cart.deleteProduct(prodId, product.price);
+    res.redirect("/admin/products");
+  });
 };
