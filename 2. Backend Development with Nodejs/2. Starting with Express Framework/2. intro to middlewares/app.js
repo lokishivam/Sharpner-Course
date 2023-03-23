@@ -6,8 +6,8 @@ const bodyParser = require("body-parser");
 //we will use a middleware to do so.
 app.use(bodyParser.urlencoded({ extended: false }));
 //now the req.body is parsed from form into object
-// in plain nodejs we had to use buffer to gather data uing a eventlistner.
 //it will also call the next method
+// in plain nodejs we had to use buffer to gather data uing a eventlistner.
 
 app.use("/product", (req, res, next) => {
   console.log("welcome to middleware product");

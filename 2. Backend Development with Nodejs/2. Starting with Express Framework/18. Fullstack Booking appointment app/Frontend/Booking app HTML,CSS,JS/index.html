@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking appointment app</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Booking App</h1>
+    </header>
+
+    <section class="container">
+      <form id="my-form" onsubmit="formhandler(event)">
+        <h1>Add User</h1>
+        <div class="msg"></div>
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" />
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="text" id="email" name="email" />
+        </div>
+        <div>
+          <label for="phone">Phone num:</label>
+          <input type="text" id="phone" name="phone" />
+        </div>
+
+        <input
+          type="hidden"
+          id="userId"
+          name="userId"
+        /><!--we will need when we use update btn-->
+
+        <div>
+          <input class="btn" id="submitBtn" type="submit" value="Submit" />
+        </div>
+
+        <div>
+          <input
+            class="btn"
+            id="updateBtn"
+            value="Update"
+            style="display: none"
+          />
+        </div>
+      </form>
+
+      <ul id="users"></ul>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
