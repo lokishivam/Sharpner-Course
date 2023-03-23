@@ -1,49 +1,30 @@
-const fs = require("fs");
-const path = require("path");
-const db = require("../util/database");
-const Cart = require("./cart");
+const Sequelize = require("sequelize");
 
-const p = path.join(
-  path.dirname(process.mainModule.filename),
-  "data",
-  "products.json"
-);
+const sequelize = require("../util/database");
+//sequelize not only contains the connection pool, But also other features of the sequelizqe package.
 
-const getProductsFromFile = (cb) => {
-  fs.readFile(p, (err, fileContent) => {
-    if (err) {
-      cb([]);
-    } else {
-      cb(JSON.parse(fileContent));
-    }
-  });
-};
+//we need to define a model i.e. table
+const Product = sequelize.define("product", {
+  //you can look for docs to know how to create a model
+  id: {
+    type: Sequelize.INTEGER, //we no longer are using sql code
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  title: Sequelize.STRING,
+  price: {
+    type: Sequelize.DOUBLE,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+});
 
-module.exports = class Product {
-  constructor(id, title, imageUrl, description, price) {
-    this.id = id;
-    this.title = title;
-    this.imageUrl = imageUrl;
-    this.description = description;
-    this.price = price;
-  }
-
-  save() {
-    return db.execute(
-      "INSERT INTO products (title, price, description, imageUrl) VALUES (?, ?, ?, ?)",
-      [this.title, this.price, this.description, this.imageUrl]
-    );
-  }
-
-  static deleteById(id) {
-    return db.execute("DELETE FROM products WHERE id = ?", [id]);
-  }
-
-  static fetchAll() {
-    return db.execute("SELECT * FROM products");
-  }
-
-  static findById(id) {
-    return db.execute("SELECT * FROM products WHERE id = ?", [id]);
-  }
-};
+module.exports = Product;
