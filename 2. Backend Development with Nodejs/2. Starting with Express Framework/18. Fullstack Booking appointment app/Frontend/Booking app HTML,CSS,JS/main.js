@@ -37,7 +37,10 @@ function formhandler(e) {
       li.id = returnedID;
       list.appendChild(li);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      alert("Unsuccessful");
+    });
 }
 
 list.addEventListener("click", (e) => {
@@ -102,5 +105,9 @@ updateBtn.addEventListener("click", () => {
     li.childNodes[0].textContent = `${obj.name}-${obj.email}-${obj.phone}`;
     submitBtn.style.display = "block";
     updateBtn.style.display = "none";
+    name.value = "";
+    email.value = "";
+    phone.value = "";
+    userId.value = "";
   });
 });

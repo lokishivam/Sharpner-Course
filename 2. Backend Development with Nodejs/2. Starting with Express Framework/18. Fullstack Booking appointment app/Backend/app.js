@@ -16,7 +16,7 @@ const userRoutes = require("./routes/user");
 app.use("/user", userRoutes); //we will pass router middleware to app.use
 
 sequelize
-  .sync()
+  .sync() //sequelize.sync() method will create the table if doesnot exist, it will scan our models made by sequelize.define
   .then(() => {
     app.listen(3000);
   })
