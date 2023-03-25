@@ -36,6 +36,7 @@ exports.getIndex = (req, res, next) => {
   });
 };
 
+//below functions are not updated and wont work
 exports.getCart = (req, res, next) => {
   Cart.getCart((cart) => {
     Product.fetchAll((products) => {

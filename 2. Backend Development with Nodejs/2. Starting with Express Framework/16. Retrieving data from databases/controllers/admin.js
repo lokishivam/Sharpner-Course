@@ -2,6 +2,7 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 exports.getAddProduct = (req, res, next) => {
+  //only sends the html form
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
@@ -23,25 +24,6 @@ exports.postAddProduct = (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
-};
-
-exports.getEditProduct = (req, res, next) => {
-  const editMode = req.query.edit;
-  if (!editMode) {
-    return res.redirect("/");
-  }
-  const prodId = req.params.productId;
-  Product.findById(prodId, (product) => {
-    if (!product) {
-      return res.redirect("/");
-    }
-    res.render("admin/edit-product", {
-      pageTitle: "Edit Product",
-      path: "/admin/edit-product",
-      editing: editMode,
-      product: product,
-    });
-  });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -76,5 +58,25 @@ exports.postDeleteProduct = (req, res, next) => {
   Product.deleteById(prodId).then(([product]) => {
     Cart.deleteProduct(prodId, product.price);
     res.redirect("/admin/products");
+  });
+};
+
+//updating the remaining to new models...
+exports.getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect("/");
+  }
+  const prodId = req.params.productId;
+  Product.findById(prodId, (product) => {
+    if (!product) {
+      return res.redirect("/");
+    }
+    res.render("admin/edit-product", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: editMode,
+      product: product,
+    });
   });
 };
