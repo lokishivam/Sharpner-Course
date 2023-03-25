@@ -2,7 +2,7 @@
 const Sequelize = require("sequelize");
 
 //sequelize object will used to create connections and manage
-const sequelize = new Sequelize("node-complete", "root", "johncena48", {
+const sequelize = new Sequelize("node-sharpner", "root", "johncena48", {
   dialect: "mysql", //sequelize is also used for many other databases, so we specify
   host: "localhost",
 });
