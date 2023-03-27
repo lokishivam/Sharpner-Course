@@ -1,26 +1,16 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
-const sequelize = require("../util/database"); //contains all the data about schema
+const sequelize = require('../util/database');
 
-//we want to create a new model called user from this sequelize object
-const User = sequelize.define("user", {
+const User = sequelize.define('user', {
   id: {
     type: Sequelize.INTEGER,
-    allowNull: false,
-    primaryKey: true,
     autoIncrement: true,
-  },
-
-  name: {
-    type: Sequelize.STRING,
     allowNull: false,
+    primaryKey: true
   },
-
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-  },
+  name: Sequelize.STRING,
+  email: Sequelize.STRING
 });
 
 module.exports = User;
