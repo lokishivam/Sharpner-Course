@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Expense Tracker</h1>
+    </header>
+
+    <section class="container">
+      <form id="my-form" onsubmit="formhandler(event)">
+        <h1>Sign Up</h1>
+
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="text" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="text" id="password" name="password" required />
+        </div>
+
+        <div>
+          <input class="btn" id="submitBtn" type="submit" value="Sign up" />
+        </div>
+      </form>
+    </section>
+  </body>
+</html>
