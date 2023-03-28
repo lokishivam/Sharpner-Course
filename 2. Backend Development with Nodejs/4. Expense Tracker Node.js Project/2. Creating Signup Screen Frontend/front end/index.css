@@ -19,6 +19,18 @@ ul li {
   margin: 5px 0;
 }
 
+.errorMessage {
+  padding: 5px;
+  background: #ed5353;
+  margin: 5px 0;
+}
+
+.successMessage {
+  padding: 5px;
+  background: #7ce893;
+  margin: 5px 0;
+}
+
 header {
   background: #f4f4f4;
   padding: 1rem;
@@ -32,16 +44,19 @@ header {
   padding: 3rem 2rem;
 }
 
-#my-form {
+#my-form,
+#login-form {
   padding: 2rem;
   background: #f4f4f4;
 }
 
-#my-form label {
+#my-form,
+#login-form label {
   display: block;
 }
 
-#my-form input {
+#my-form,
+#login-form input {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;

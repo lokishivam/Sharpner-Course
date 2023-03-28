@@ -1,4 +1,4 @@
-const form = document.getElementById("my-form");
+const form = document.getElementById("login-form");
 const message = document.getElementById("message");
 
 async function formhandler(e) {
@@ -9,17 +9,26 @@ async function formhandler(e) {
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    name.value = "";
-    email.value = "";
-    password.value = "";
-    const data = await axios.post("http://localhost:3000/users/add-user", obj);
+
+    const result = await axios.post(
+      "http://localhost:3000/users/verify-user",
+      obj
+    );
+
+    message.innerHTML = `Login Successful`;
+    message.classList.add("successMessage");
+
+    e.target.name.value = "";
+    e.target.email.value = "";
+    e.target.password.value = "";
   } catch (err) {
     console.log(err);
     console.log(err.response.data.errors[0].message);
+    message.classList.remove("successMessage");
     message.innerHTML = `Login Failed : ${err.response.data.errors[0].message}`;
     message.classList.add("errorMessage");
-    setTimeout(() => {
-      message.remove();
-    }, 4000);
+    // setTimeout(() => {
+    //   message.remove();
+    // }, 4000);
   }
 }

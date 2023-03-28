@@ -15,6 +15,29 @@ exports.postAddUser = async (req, res) => {
   }
 };
 
+exports.postVerifyUser = async (req, res) => {
+  try {
+    const user = req.body;
+    const resultUser = await User.findOne({ where: { email: user.email } });
+    console.log("hii  " + resultUser);
+
+    if (resultUser) {
+      const resultPassord = await User.findOne({
+        where: { password: user.password },
+      });
+      if (!resultPassord) {
+        res.status(500).json({ errors: [{ message: "Incorrect password" }] });
+      } else {
+        res.status(200).json(resultUser);
+      }
+    } else {
+      res.status(500).json({ errors: [{ message: "User dosent exists" }] });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 // exports.getAddUsers = async (req, res) => {
 //   try {
 //     const users = await User.findAll();
