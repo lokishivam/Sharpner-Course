@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense tracker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>To-do List</h1>
+    </header>
+
+    <section class="container">
+      <form id="my-form">
+        <h1>Add Task</h1>
+
+        <label for="task">Task:</label>
+        <input type="text" id="task" name="task" required />
+
+        <label for="details">Task Details:</label>
+        <input type="text" id="details" name="details" required />
+
+        <input type="submit" value="Add" class="btn" id="submitBtn" />
+      </form>
+
+      <h1 id="red">Reamining To-do</h1>
+      <ul id="remainingList"></ul>
+
+      <h1 id="green">Completed To-do</h1>
+      <ul id="completedList"></ul>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
