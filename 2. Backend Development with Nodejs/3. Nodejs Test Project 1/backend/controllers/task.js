@@ -7,6 +7,7 @@ exports.postAddTask = async (req, res) => {
     const resultTask = await Task.create({
       task: taskObj.task === "" ? null : taskObj.task,
       details: taskObj.details === "" ? null : taskObj.details,
+      status: false,
     });
     res.json(resultTask);
   } catch (error) {
@@ -15,47 +16,34 @@ exports.postAddTask = async (req, res) => {
   }
 };
 
-// exports.getProducts = async (req, res) => {
-//   try {
-//     const products = await Product.findAll();
-//     res.status(200).json(products);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// };
+exports.getTasks = async (req, res) => {
+  try {
+    const tasks = await Task.findAll();
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
-// exports.deleteProduct = async (req, res) => {
-//   try {
-//     const id = req.params.productId;
-//     const product = await Product.findByPk(id);
-//     const destroyedproduct = await product.destroy();
-//     res.status(200).json(destroyedproduct);
-//   } catch (error) {
-//     res.status(500).json(error); //internal server error
-//   }
-// };
+exports.deleteTask = async (req, res) => {
+  try {
+    const id = req.params.taskId;
+    const task = await Task.findByPk(id);
+    task.destroy();
+    res.status(200).json();
+  } catch (error) {
+    res.status(500).json(error); //internal server error
+  }
+};
 
-// exports.getProduct = async (req, res) => {
-//   try {
-//     const id = req.params.productId;
-//     const product = await Product.findByPk(id);
-//     res.status(200).json(product);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// };
-
-// exports.postEditProduct = async (req, res) => {
-//   try {
-//     const obj = req.body;
-//     let resultant = 0;
-//     const product = await Product.findByPk(obj.id);
-//     difference = obj.sellingPrice - product.sellingPrice; //new-old
-//     product.sellingPrice = obj.sellingPrice;
-//     product.productName = obj.productName;
-//     await product.save();
-//     res.status(200).json({ difference });
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// };
+exports.updateTask = async (req, res) => {
+  try {
+    const id = req.params.taskId;
+    const task = await Task.findByPk(id);
+    task.status = true;
+    task.save();
+    res.status(200).json();
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};

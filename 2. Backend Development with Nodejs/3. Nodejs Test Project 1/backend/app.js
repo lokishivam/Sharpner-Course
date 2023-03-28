@@ -15,7 +15,7 @@ const taskRoutes = require("./routes/task");
 app.use("/tasks", taskRoutes); //we will pass router middleware to app.use
 
 sequelize
-  .sync({ force: true }) //sequelize.sync() method will create the table if doesnot exist, it will scan our models made by sequelize.define
+  .sync() //sequelize.sync() method will create the table if doesnot exist, it will scan our models made by sequelize.define
   .then(() => {
     app.listen(3000);
   })

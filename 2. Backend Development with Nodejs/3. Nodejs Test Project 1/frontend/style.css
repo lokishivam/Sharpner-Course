@@ -81,7 +81,11 @@ header {
   padding: 3px;
   margin-left: 5px;
   color: white;
-  background-color: black;
+  background-color: rgb(185, 47, 47);
+}
+.done {
+  color: white;
+  background-color: rgb(61, 151, 43);
 }
 
 #green {

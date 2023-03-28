@@ -6,12 +6,12 @@ const taskControllers = require("../controllers/task");
 
 router.post("/add-task", taskControllers.postAddTask);
 
-// router.get("/get-products", taskControllers.getProducts);
+router.get("/get-tasks", taskControllers.getTasks);
 
 // router.post("/edit-product", taskControllers.postEditProduct);
 
-// router.delete("/delete/:productId", taskControllers.deleteProduct);
+router.delete("/delete/:taskId", taskControllers.deleteTask);
 
-// router.get("/get-product/:productId", taskControllers.getProduct);
+router.get("/update-task/:taskId", taskControllers.updateTask);
 
 module.exports = router;

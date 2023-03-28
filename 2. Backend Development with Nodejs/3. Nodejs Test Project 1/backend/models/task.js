@@ -21,6 +21,10 @@ const Task = sequelize.define("task", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  status: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+  },
 });
 
 module.exports = Task; //User model is exported
