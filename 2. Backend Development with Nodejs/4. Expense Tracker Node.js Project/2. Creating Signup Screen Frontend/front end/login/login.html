@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Tracker</title>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../form.css" />
   </head>
   <body>
     <header>
@@ -13,7 +13,7 @@
     </header>
 
     <section class="container">
-      <form id="login-form" onsubmit="formhandler(event)">
+      <form id="login-form" class="form" onsubmit="formhandler(event)">
         <h1>Login</h1>
 
         <div>
@@ -35,6 +35,7 @@
       </form>
 
       <div id="message"></div>
+      New user? <a href="../sign up/signup.html"> sign up </a>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="login.js"></script>

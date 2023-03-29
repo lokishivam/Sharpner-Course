@@ -44,19 +44,16 @@ header {
   padding: 3rem 2rem;
 }
 
-#my-form,
-#login-form {
+.form {
   padding: 2rem;
   background: #f4f4f4;
 }
 
-#my-form,
-#login-form label {
+.form label {
   display: block;
 }
 
-#my-form,
-#login-form input {
+.form input {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;

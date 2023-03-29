@@ -26,12 +26,12 @@ exports.postVerifyUser = async (req, res) => {
         where: { password: user.password },
       });
       if (!resultPassord) {
-        res.status(500).json({ errors: [{ message: "Incorrect password" }] });
+        res.status(401).json({ errors: [{ message: "Incorrect password" }] });
       } else {
         res.status(200).json(resultUser);
       }
     } else {
-      res.status(500).json({ errors: [{ message: "User dosent exists" }] });
+      res.status(404).json({ errors: [{ message: "User dosent exists" }] });
     }
   } catch (error) {
     res.status(500).json(error);

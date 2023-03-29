@@ -14,12 +14,14 @@ async function formhandler(e) {
     password.value = "";
     const data = await axios.post("http://localhost:3000/users/add-user", obj);
   } catch (err) {
-    console.log(err);
-    console.log(err.response.data.errors[0].message);
-    message.innerHTML = `Login Failed : ${err.response.data.errors[0].message}`;
+    if (err.response) {
+      message.innerHTML = `Login Failed : ${err.response.data.errors[0].message}`;
+    } else {
+      message.innerHTML = `Login Failed : ${err}`;
+    }
     message.classList.add("errorMessage");
-    setTimeout(() => {
-      message.remove();
-    }, 4000);
+    // setTimeout(() => {
+    //   message.remove();
+    // }, 4000);
   }
 }
