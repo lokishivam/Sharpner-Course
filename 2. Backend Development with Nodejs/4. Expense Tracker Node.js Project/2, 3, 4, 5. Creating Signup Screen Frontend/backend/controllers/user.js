@@ -1,14 +1,16 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 exports.postAddUser = async (req, res) => {
   try {
-    const user = req.body;
-    const resultUser = await User.create({
-      name: user.name === "" ? null : user.name,
-      email: user.email === "" ? null : user.email,
-      password: user.password === "" ? null : user.password,
+    const { name, email, password } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      name: name === "" ? null : name,
+      email: email === "" ? null : email,
+      password: hash === "" ? null : hash,
     });
-    res.json(resultUser);
+    res.json();
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -17,19 +19,20 @@ exports.postAddUser = async (req, res) => {
 
 exports.postVerifyUser = async (req, res) => {
   try {
-    const user = req.body;
-    const resultUser = await User.findOne({ where: { email: user.email } });
-    console.log("hii  " + resultUser);
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } }); //const users = await User.findAll({ where: { email } })//users[0]
+    // it's possible that the findOne method may not return the instance that you expect,
+    // as it will only return the first one that it finds. So use it only for a unique identifier.
+    //user is either a valid user or null.
 
-    if (resultUser) {
-      const resultPassord = await User.findOne({
-        where: { password: user.password },
+    if (user) {
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err) {
+          res.status(401).json({ errors: [{ message: "Incorrect password" }] });
+        } else {
+          res.status(200).json();
+        }
       });
-      if (!resultPassord) {
-        res.status(401).json({ errors: [{ message: "Incorrect password" }] });
-      } else {
-        res.status(200).json(resultUser);
-      }
     } else {
       res.status(404).json({ errors: [{ message: "User dosent exists" }] });
     }

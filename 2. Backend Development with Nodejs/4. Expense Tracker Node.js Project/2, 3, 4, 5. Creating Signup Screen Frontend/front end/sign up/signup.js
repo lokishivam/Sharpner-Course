@@ -9,11 +9,15 @@ async function formhandler(e) {
       email: e.target.email.value,
       password: e.target.password.value,
     };
+
+    const data = await axios.post("http://localhost:3000/users/add-user", obj);
     name.value = "";
     email.value = "";
     password.value = "";
-    const data = await axios.post("http://localhost:3000/users/add-user", obj);
+
+    message.innerHTML = `Sign-up successful `;
   } catch (err) {
+    message.classList.remove("successMessage");
     if (err.response) {
       message.innerHTML = `Login Failed : ${err.response.data.errors[0].message}`;
     } else {
