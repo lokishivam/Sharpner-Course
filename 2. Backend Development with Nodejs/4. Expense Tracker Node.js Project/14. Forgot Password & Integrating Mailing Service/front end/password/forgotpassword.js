@@ -13,7 +13,7 @@ async function formhandler(e) {
       obj
     );
     message.classList.remove("errorMessage");
-    message.innerHTML = `${result.data}`;
+    message.innerHTML = `Login Successful`;
     message.classList.add("successMessage");
 
     e.target.email.value = "";

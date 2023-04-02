@@ -1,4 +1,4 @@
-const form = document.getElementById("forgotpassword-form");
+const form = document.getElementById("login-form");
 const message = document.getElementById("message");
 
 async function formhandler(e) {
@@ -6,17 +6,23 @@ async function formhandler(e) {
   try {
     const obj = {
       email: e.target.email.value,
+      password: e.target.password.value,
     };
 
     const result = await axios.post(
-      "http://localhost:3000/password/forgotPassword",
+      "http://localhost:3000/users/verify-user",
       obj
     );
     message.classList.remove("errorMessage");
-    message.innerHTML = `${result.data}`;
+    message.innerHTML = `Login Successful`;
     message.classList.add("successMessage");
 
     e.target.email.value = "";
+    e.target.password.value = "";
+
+    localStorage.setItem("token", result.data.token); //storing the token in the localStorage.
+
+    window.location.href = "../expenses/index.html";
   } catch (err) {
     message.classList.remove("successMessage");
     if (err.response) {

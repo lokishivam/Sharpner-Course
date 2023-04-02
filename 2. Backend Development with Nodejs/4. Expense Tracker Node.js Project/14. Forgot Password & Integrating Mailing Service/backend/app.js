@@ -9,7 +9,6 @@ const sequelize = require("./util/database");
 const User = require("./models/user");
 const Expense = require("./models/expense");
 const Order = require("./models/order");
-const Forgotpassword = require("./models/forgotPassword");
 
 const app = express();
 
@@ -36,9 +35,6 @@ Expense.belongsTo(User); //creates foreignKey of user inside the table of Expens
 //also if the payments are recurring, there will be multiple orders.. (exploring possiblities)
 User.hasMany(Order);
 Order.belongsTo(User);
-
-User.hasMany(Forgotpassword);
-Forgotpassword.belongsTo(User);
 
 sequelize
   .sync() //sequelize.sync() method will create the table if doesnot exist, it will scan our models made by sequelize.define
