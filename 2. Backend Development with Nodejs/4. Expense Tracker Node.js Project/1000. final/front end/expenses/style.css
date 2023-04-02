@@ -134,3 +134,8 @@ select {
 #leadershipList {
   display: none;
 }
+
+#downloadExpense {
+  display: none;
+  margin-top: 25px;
+}

@@ -4,6 +4,7 @@ const premiumBtn = document.getElementById("premiumBtn");
 const leadershipSection = document.getElementById("leadershipSection");
 const leadershipBtn = document.getElementById("leadershipBtn");
 const leadershipList = document.getElementById("leadershipList");
+const downloadExpense = document.getElementById("downloadExpense");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -85,6 +86,7 @@ function premiumFeaturesDisplay() {
   premiumBtn.classList.add("premiumUser");
   premiumBtn.innerHTML = "Premium User";
   leadershipSection.style.display = "block";
+  downloadExpense.style.display = "block";
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -183,3 +185,17 @@ leadershipBtn.addEventListener("click", async () => {
     leadershipBtn.innerHTML = "Leadership Board";
   }
 });
+
+function download() {
+  try {
+    const response = axios.get("http://localhost:3000/users/download", {
+      headers: { token: token },
+    });
+    var a = document.createElement("a");
+    a.href = response.data.fileUrl;
+    a.download = "myexpense.csv";
+    a.click();
+  } catch (error) {
+    console.log(error);
+  }
+}
