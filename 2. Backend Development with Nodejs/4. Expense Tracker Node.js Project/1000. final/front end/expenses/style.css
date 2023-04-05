@@ -11,13 +11,13 @@ body {
 
 ul {
   list-style: none;
+  text-align: left;
 }
 
 ul li {
   padding: 10px;
   background: #f4f4f4;
   margin: 5px 0;
-  width: 500px;
 }
 
 header {
@@ -138,4 +138,14 @@ select {
 #downloadExpense {
   display: none;
   margin-top: 25px;
+}
+
+.paginate {
+  background-color: #f5eb81;
+  display: inline-block;
+}
+
+.expense {
+  width: 500px;
+  text-align: center;
 }
