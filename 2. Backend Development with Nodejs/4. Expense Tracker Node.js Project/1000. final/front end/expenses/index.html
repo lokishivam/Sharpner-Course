@@ -35,13 +35,21 @@
 
         <input type="submit" value="Add Expense" class="btn" id="submitBtn" />
       </form>
+      <!-- <div style="display: inline-block"> -->
       <div class="expense">
         <h1>Expenses</h1>
 
         <ul id="expenseList"></ul>
-        <div class="paginate" id="expenseListPaginate">
-          <button>help</button>
-          <button>help</button>
+
+        <div class="paginate" id="expenseListPaginate"></div>
+
+        <div id="paginatelimit">
+          <label for="pageLimit">Rows per Page:</label>
+          <select id="pageLimit">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
         </div>
       </div>
 
@@ -51,10 +59,14 @@
         </button>
         <ul id="leadershipList"></ul>
       </div>
+      <!-- </div> -->
 
-      <button onclick="download()" id="downloadExpense" class="btn">
-        Download File
-      </button>
+      <div class="DownloadSection">
+        <button onclick="download()" id="downloadExpense" class="btn">
+          Download current expenses
+        </button>
+        <ul id="downloadList"></ul>
+      </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

@@ -29,4 +29,10 @@ router.get(
   expenseControllers.downloadExpenses
 );
 
+router.get(
+  "/get-Paginated-expenses",
+  authenticationMiddleware.authenticateUser,
+  expenseControllers.getPaginatedExpenses
+);
+
 module.exports = router;

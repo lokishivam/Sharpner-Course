@@ -5,6 +5,9 @@ const leadershipSection = document.getElementById("leadershipSection");
 const leadershipBtn = document.getElementById("leadershipBtn");
 const leadershipList = document.getElementById("leadershipList");
 const downloadExpense = document.getElementById("downloadExpense");
+const downloadList = document.getElementById("downloadList");
+const expenseListPaginate = document.getElementById("expenseListPaginate");
+const pageLimit = document.getElementById("pageLimit");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -35,8 +38,20 @@ form.addEventListener("submit", async (e) => {
         headers: { token: localStorage.getItem("token") },
       }
     );
+
+    //improve; If you are not on 1st page, and you are trying to add expense, it will add to the top of current page.
+    //To solve this, call the api to get expenses at first page, as recent expenses is already in the db.
+    //You need to know the current page. -> get from the pagination buttons
+
     li.id = expense.data.id;
-    expenseList.appendChild(li);
+    const firstChild = expenseList.firstChild;
+    if (firstChild) {
+      // Insert the new li element before the first child element
+      expenseList.insertBefore(li, firstChild);
+    } else {
+      // If the list is empty, simply append the new li element
+      expenseList.appendChild(li);
+    }
 
     e.target.amount.value = "";
     e.target.description.value = "";
@@ -93,34 +108,67 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const token = localStorage.getItem("token");
     const decodeToken = parseJwt(token);
-    console.log(decodeToken);
     const ispremiumuser = decodeToken.ispremiumuser;
     if (ispremiumuser) {
       premiumFeaturesDisplay();
     }
-    const res = await axios.get("http://localhost:3000/expenses/get-expenses", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const expenses = res.data;
 
-    for (let expense of expenses) {
-      const li = document.createElement("li");
-      li.innerHTML = `${expense.category} || ${expense.description} ||  ${expense.amount} `;
-
-      const del = document.createElement("BUTTON");
-      del.innerHTML = "Delete";
-      del.classList.add("delete");
-      del.classList.add("actionBtn");
-      li.appendChild(del);
-
-      li.id = expense.id;
-      expenseList.appendChild(li);
-    }
+    const res = await axios.get(
+      `http://localhost:3000/expenses/get-Paginated-expenses/?pageNo=1&limit=${localStorage.getItem(
+        "listRows"
+      )}`,
+      {
+        headers: { token: localStorage.getItem("token") },
+      }
+    );
+    displayList(res, expenseList, expenseListPaginate);
   } catch (error) {
     alert("failed to fetch data ");
     console.log(error);
   }
 });
+
+function displayList(res, list, listPaginate) {
+  const expenses = res.data.rows;
+  paginateButtons(res, listPaginate);
+
+  list.innerHTML = "";
+  for (let expense of expenses) {
+    const li = document.createElement("li");
+    li.innerHTML = `${expense.category} || ${expense.description} ||  ${expense.amount} `;
+
+    const del = document.createElement("BUTTON");
+    del.innerHTML = "Delete";
+    del.classList.add("delete");
+    del.classList.add("actionBtn");
+    li.appendChild(del);
+
+    li.id = expense.id;
+    list.appendChild(li);
+  }
+}
+
+function paginateButtons(res, listPaginate) {
+  listPaginate.innerHTML = "";
+  const { hasNextPage, nextPage } = res.data;
+  const { currentPage, hasPrevPage, prevPage } = res.data;
+  if (hasPrevPage) {
+    const buttonPrev = document.createElement("button");
+    buttonPrev.classList.add("paginateButtonStyle");
+    buttonPrev.innerHTML = prevPage;
+    listPaginate.appendChild(buttonPrev);
+  }
+  const buttonCur = document.createElement("button");
+  buttonCur.innerHTML = currentPage;
+  buttonCur.classList.add("paginateButtonStyle");
+  listPaginate.appendChild(buttonCur);
+  if (hasNextPage) {
+    const buttonNext = document.createElement("button");
+    buttonNext.innerHTML = nextPage;
+    buttonNext.classList.add("paginateButtonStyle");
+    listPaginate.appendChild(buttonNext);
+  }
+}
 
 premiumBtn.addEventListener("click", async () => {
   try {
@@ -186,16 +234,68 @@ leadershipBtn.addEventListener("click", async () => {
   }
 });
 
-function download() {
+async function download() {
   try {
-    const response = axios.get("http://localhost:3000/users/download", {
-      headers: { token: token },
-    });
-    var a = document.createElement("a");
-    a.href = response.data.fileUrl;
-    a.download = "myexpense.csv";
-    a.click();
+    //1.limit the top 5 downloads, with most recent at the top
+    //2.Add logic to close the button and, on open, send request
+
+    console.log("in download function");
+    const response = await axios.get(
+      "http://localhost:3000/expenses/download",
+      {
+        headers: { token: localStorage.getItem("token") },
+      }
+    );
+    // let a = document.createElement("a");
+    // a.href = response.data.fileUrl;
+    // console.log(a.href);
+    // a.download = "myexpense.csv";
+    // a.click();
+    const allExpenses = response.data.allExpenses;
+    for (let expense of allExpenses) {
+      let li = document.createElement("li");
+      //li.innerHTML = expense.name;
+      let a = document.createElement("a");
+      a.href = expense.link;
+      a.textContent = expense.name;
+      li.appendChild(a);
+      downloadList.appendChild(li);
+    }
   } catch (error) {
     console.log(error);
   }
+}
+
+//paginate buttons on expenseList
+expenseListPaginate.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("paginateButtonStyle")) {
+    const pageNo = e.target.innerHTML;
+    const res = await axios.get(
+      `http://localhost:3000/expenses/get-Paginated-expenses/?pageNo=${pageNo}&limit=${localStorage.getItem(
+        "listRows"
+      )}`,
+      {
+        headers: { token: localStorage.getItem("token") },
+      }
+    );
+
+    displayList(res, expenseList, expenseListPaginate);
+  }
+});
+
+//leadship board:
+//1. when pressed button, display only first 5 downloads (you need to change backend),
+//2. you can reuse displayList(res, leadershipList, leadershipListPaginate)
+//3. create a eventlistner for leadershipListPaginate
+
+//similar for downloads.
+
+pageLimit.addEventListener("change", (event) => {
+  const selectedValue = event.target.value;
+  console.log(`Selected value: ${selectedValue}`);
+  localStorage.setItem("listRows", selectedValue);
+});
+const storedValue = localStorage.getItem("listRows");
+if (storedValue) {
+  pageLimit.value = storedValue;
 }

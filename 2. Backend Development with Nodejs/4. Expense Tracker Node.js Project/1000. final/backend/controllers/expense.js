@@ -140,3 +140,45 @@ exports.downloadExpenses = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getPaginatedExpenses = async (req, res) => {
+  try {
+    console.log("entered into pagination");
+    const user = req.user;
+    const pageNo = Number(req.query.pageNo);
+    console.log("0. page no = ", pageNo);
+    const limit = req.query.limit != "null" ? Number(req.query.limit) : 5; // number of items per page
+    console.log(limit);
+    const offset = (pageNo - 1) * limit; // calculate the offset based on the page number and limit
+
+    // Find the expenses belonging to the user
+    const { count, rows } = await Expense.findAndCountAll({
+      where: {
+        userId: user.id,
+      },
+      offset: offset,
+      limit: limit,
+      order: [["createdAt", "DESC"]], // order rows by createdAt field in descending order
+    });
+    console.log("1. rows:", rows);
+
+    const currentPage = pageNo;
+    const hasNextPage = limit * pageNo < count; //total till this page < total
+    const nextPage = pageNo + 1;
+    const hasPrevPage = pageNo > 1;
+    const prevPage = pageNo - 1;
+    const obj = {
+      currentPage,
+      hasNextPage,
+      nextPage,
+      hasPrevPage,
+      prevPage,
+      rows,
+    };
+    console.log("2. obj = ", obj);
+    res.status(200).json(obj);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error.message);
+  }
+};

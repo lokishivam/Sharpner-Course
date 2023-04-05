@@ -17,7 +17,7 @@ ul {
 ul li {
   padding: 10px;
   background: #f4f4f4;
-  margin: 5px 0;
+  margin: 5px 5px;
 }
 
 header {
@@ -121,14 +121,15 @@ select {
   border-radius: 5px;
   margin: 15px 0;
   text-align: center;
-  margin-left: 220px;
 }
 
 .leadershipSection {
   margin-top: 25px;
-  background: #ff00000d;
-  width: 500px;
+  /* background: #ff00000d; */
+  width: 50%;
   display: none;
+  text-align: center;
+  border: solid black 1px;
 }
 
 #leadershipList {
@@ -141,11 +142,24 @@ select {
 }
 
 .paginate {
-  background-color: #f5eb81;
+  /* background-color: #f5eb81; */
   display: inline-block;
 }
 
 .expense {
-  width: 500px;
+  width: 50%;
   text-align: center;
+  border: solid black 1px;
+  margin-top: 10px;
+}
+
+.paginateButtonStyle {
+  padding: 5px;
+  margin: 5px 10px;
+}
+
+.DownloadSection {
+  width: 50%;
+  text-align: center;
+  margin-top: 25px;
 }
