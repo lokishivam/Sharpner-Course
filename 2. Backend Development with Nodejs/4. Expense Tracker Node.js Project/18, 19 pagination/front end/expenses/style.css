@@ -1,0 +1,165 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+ul {
+  list-style: none;
+  text-align: left;
+}
+
+ul li {
+  padding: 10px;
+  background: #f4f4f4;
+  margin: 5px 5px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f4f4;
+  padding: 1rem;
+}
+
+.nonPremium {
+  background: #1d75fa;
+  padding: 10px 15px;
+  border: 0;
+  color: #fff;
+  border-radius: 5px;
+  margin: 5px 0;
+  text-align: center;
+  margin-left: 15px;
+}
+
+.premiumUser {
+  background: #f5eb81;
+  padding: 10px 15px;
+  border: 0;
+  color: #000000;
+  border-radius: 5px;
+  margin: 5px 0;
+  text-align: center;
+  margin-left: 15px;
+}
+
+header h1 {
+}
+
+.container {
+  margin: auto;
+  /* width: 600px; */
+  overflow: auto;
+  padding: 1rem 1rem;
+}
+
+#my-form {
+  padding: 5px;
+  background: #f4f4f4;
+}
+
+#my-form label {
+  margin-left: 15px;
+}
+
+#my-form input[type="text"],
+select {
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: 0;
+  background: #333;
+  color: #fff;
+  border-radius: 5px;
+  margin: 5px 0;
+  text-align: center;
+  margin-left: 15px;
+}
+
+.btn:hover {
+  background: #444;
+}
+
+.bg-dark {
+  background: #333;
+  color: #fff;
+}
+
+.error {
+  background: orangered;
+  color: #fff;
+  padding: 5px;
+  margin: 5px;
+}
+
+.actionBtn {
+  margin: 0px;
+  float: right;
+  padding: 3px;
+  margin-left: 5px;
+  color: white;
+  background-color: rgb(185, 47, 47);
+}
+
+.leadershipBtn {
+  padding: 10px 15px;
+  border: 0;
+  background: #b5ece6;
+  color: #070707;
+  border-radius: 5px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.leadershipSection {
+  margin-top: 25px;
+  /* background: #ff00000d; */
+  width: 50%;
+  display: none;
+  text-align: center;
+  border: solid black 1px;
+}
+
+#leadershipList {
+  display: none;
+}
+
+#downloadExpense {
+  display: none;
+  margin-top: 25px;
+}
+
+.paginate {
+  /* background-color: #f5eb81; */
+  display: inline-block;
+}
+
+.expense {
+  width: 50%;
+  text-align: center;
+  border: solid black 1px;
+  margin-top: 10px;
+}
+
+.paginateButtonStyle {
+  padding: 5px;
+  margin: 5px 10px;
+}
+
+.DownloadSection {
+  width: 50%;
+  text-align: center;
+  margin-top: 25px;
+}

@@ -34,23 +34,18 @@ exports.postVerifyUser = async (req, res) => {
 
     if (user) {
       bcrypt.compare(password, user.password, (err, result) => {
-        if (result) {
-          return res
+        if (err) {
+          res.status(401).json({ errors: [{ message: "Incorrect password" }] });
+        } else {
+          res
             .status(200)
             .json({ token: getToken(user.id, user.ispremiumuser) });
-        } else {
-          return res
-            .status(401)
-            .json({ errors: [{ message: "Incorrect password" }] });
         }
       });
     } else {
-      return res
-        .status(404)
-        .json({ errors: [{ message: "User dosent exists" }] });
+      res.status(404).json({ errors: [{ message: "User dosent exists" }] });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };

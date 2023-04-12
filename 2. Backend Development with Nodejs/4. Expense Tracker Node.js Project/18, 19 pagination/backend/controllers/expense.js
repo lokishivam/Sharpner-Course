@@ -126,6 +126,7 @@ exports.downloadExpenses = async (req, res) => {
     // console.log(instanceMethods);
 
     await req.user.createDownloadExpense({ link: fileUrl, name: fileName });
+
     console.log("5. adding data to the downloads table");
 
     const allExpenses = await req.user.getDownloadExpenses({
@@ -142,12 +143,12 @@ exports.downloadExpenses = async (req, res) => {
 
 exports.getPaginatedExpenses = async (req, res) => {
   try {
-    //console.log("entered into pagination");
+    console.log("entered into pagination");
     const user = req.user;
     const pageNo = Number(req.query.pageNo);
-    //console.log("0. page no = ", pageNo);
+    console.log("0. page no = ", pageNo);
     const limit = req.query.limit != "null" ? Number(req.query.limit) : 5; // number of items per page
-    //console.log(limit);
+    console.log(limit);
     const offset = (pageNo - 1) * limit; // calculate the offset based on the page number and limit
 
     // Find the expenses belonging to the user
@@ -174,7 +175,7 @@ exports.getPaginatedExpenses = async (req, res) => {
       prevPage,
       rows,
     };
-    //console.log("2. obj = ", obj);
+    console.log("2. obj = ", obj);
     res.status(200).json(obj);
   } catch (error) {
     console.log(error);

@@ -7,10 +7,9 @@ exports.getBuyPremium = async (req, res) => {
   try {
     const user = req.user;
     console.log("done1");
-
     const razorpay = new RazorPay({
       key_id: process.env.RAZORPAY_API_KEYID,
-      key_secret: process.env.RAZORPAY_API_KEYSECRET,
+      key_secret: RAZORPAY_API_KEYSECRET,
     });
 
     console.log("done2");
@@ -30,8 +29,7 @@ exports.getBuyPremium = async (req, res) => {
     console.log("done5");
     res.json({ order, key_id: razorpay.key_id });
   } catch (error) {
-    console.log(error);
-    res.status(404).json(error.message);
+    res.status(404).json(error);
   }
 };
 
