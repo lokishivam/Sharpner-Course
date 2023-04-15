@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="../form.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Group Chat App</h1>
+    </header>
+
+    <section class="container">
+      <form id="my-form" class="form" onsubmit="formhandler(event)">
+        <h1>Sign up</h1>
+
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div>
+          <label for="mobile">Mobile Number:</label>
+          <input type="text" id="mobile" name="mobile" required />
+        </div>
+
+        <div>
+          <label for="email">Email:</label>
+          <input type="text" id="email" name="email" required />
+        </div>
+
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <div>
+          <input class="btn" id="submitBtn" type="submit" value="Sign up" />
+        </div>
+      </form>
+
+      <div id="message"></div>
+      Already a user<a href="../login/login.html"> Login </a>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="signup.js"></script>
+  </body>
+</html>
