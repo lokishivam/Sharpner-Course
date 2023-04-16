@@ -22,16 +22,16 @@ async function formhandler(e) {
     e.target.password.value = "";
     e.target.mobile.value = "";
 
-    //localStorage.setItem("token", result.data.token); //storing the token in the localStorage.
+    localStorage.setItem("token", result.data.token); //storing the token in the localStorage.
 
     //window.location.href = "../expenses/index.html";
   } catch (err) {
     message.classList.remove("successMessage");
-    // if (err.response) {
-    //   message.innerHTML = `Login Failed : ${err.response.data.errors[0].message}`;
-    // } else {
+    if (err.response) {
+      message.innerHTML = `Login Failed : ${err.response.data.errors[0].message}`;
+    } else {
       message.innerHTML = `Login Failed : ${err}`;
     }
     message.classList.add("errorMessage");
-  //}
+  }
 }
