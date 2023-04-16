@@ -20,13 +20,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(helmet());
+// app.use(helmet());
 
-//doubt..
-const accessLogStream = fs.createWriteStream(`${currentPath}/access.log`, {
-  flags: "a",
-});
-app.use(morgan("combined", { stream: accessLogStream }));
+// //doubt..
+// const accessLogStream = fs.createWriteStream(`${currentPath}/access.log`, {
+//   flags: "a",
+// });
+// app.use(morgan("combined", { stream: accessLogStream }));
 
 const userRoutes = require("./routes/user");
 const expenseRoutes = require("./routes/expense");

@@ -12,7 +12,7 @@ async function formhandler(e) {
     };
 
     console.log(obj);
-    //const data = await axios.post("http://localhost:3000/users/add-user", obj);
+    const data = await axios.post("http://localhost:3000/users/add-user", obj);
 
     e.target.name.value = "";
     e.target.email.value = "";
