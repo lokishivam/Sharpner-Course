@@ -24,6 +24,11 @@ async function formhandler(e) {
 
     localStorage.setItem("token", result.data.token); //storing the token in the localStorage.
 
+    //If no olderChats in local storage, we need to add an empty array.
+    if(localStorage.getItem('olderChats') === null){
+      localStorage.setItem('olderChats', JSON.stringify([]));
+    }
+
     window.location.href = "../chats/chat.html";
   } catch (err) {
     message.classList.remove("successMessage");

@@ -22,3 +22,17 @@ exports.getMessages = async (req, res) => {
         res.status(500).json({message: error.message});
     }
 }
+
+exports.getRecentMessages = async (req, res) => {
+    try {
+        const from = Number(req.query.from);
+        const messages = await Message.findAll({
+            offset : from == 0 ? 0 : from-1,//from will never be 0 **made sure by front end
+            //no limit
+        });
+        res.json(messages);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: error.message});
+    }
+}

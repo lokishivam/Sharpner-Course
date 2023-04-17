@@ -21,6 +21,7 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
   }
 //_____________________________________________________
+//                                   Messages
 
 async function getAllMessages(){
     try {
@@ -31,13 +32,8 @@ async function getAllMessages(){
         const messages = response.data;
         // clear the displayMessages element before adding new messages
         displayMessages.innerHTML = '';
-        messages.forEach((message) => {
-            const messageDiv = document.createElement('div');
-            messageDiv.innerHTML = `${message.sender} : ${message.message}`
-            messageDiv.classList.add('chat-bubble');
-            messageDiv.classList.add(message.userId === myId ? 'chat-bubble-right' : 'chat-bubble-left');
-            displayMessages.append(messageDiv);
-        })
+        displayMsg(messages);
+        
     } catch (error) {
         console.log(error);
         if (error.response) {
@@ -48,8 +44,54 @@ async function getAllMessages(){
     }
 }
 
-setInterval(getAllMessages,1000);//calls after every sec, setTimeOut calls after a sec but only once.
+async function getRecentMessages(){
+    try {
+        //get older chats
+        const olderChats = JSON.parse(localStorage.getItem('olderChats'));
+        console.log('olderChats = ', olderChats);
+        //we want the recent chat, i.e. after the olderChat ends
+        const from = 1 + (olderChats.length === 0 ? 0 : olderChats[olderChats.length-1].id);
+        console.log('from = ',from)
+        //get the recent messages
+        const response = await axios.get(`http://localhost:3000/messages/get-recent-messages/?from=${from}`,
+        {
+            headers: { token:token},
+        });
+        const recentChats = response.data;
+        //combine both the chats to display the final chats
+        let finalChats = [...olderChats, ...recentChats];
+    
+        displayMessages.innerHTML = '';
+        displayMsg(finalChats);
+        
+        if(finalChats.length > 10){
+            finalChats = finalChats.slice(-10);
+        }
+        localStorage.setItem('olderChats', JSON.stringify(finalChats));
+        
+    } catch (error) {
+        console.log(error);
+        if (error.response) {
+            alert(error.response.data.message);     
+        } else {
+            alert(error);
+        }
+    }
+}
 
+function displayMsg(messages){
+    messages.forEach((message) => {
+        const messageDiv = document.createElement('div');
+        messageDiv.innerHTML = `${message.sender} : ${message.message}`
+        messageDiv.classList.add('chat-bubble');
+        messageDiv.classList.add(message.userId === myId ? 'chat-bubble-right' : 'chat-bubble-left');
+        displayMessages.append(messageDiv);
+    })
+}
+
+getRecentMessages();
+//setInterval(getAllMessages,1000);//calls after every sec, setTimeOut calls after a sec but only once.
+//--------------------------------------------------------------------
 
 messageForm.onsubmit = async (e) => {
     try {

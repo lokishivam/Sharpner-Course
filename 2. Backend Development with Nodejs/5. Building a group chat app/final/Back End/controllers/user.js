@@ -26,7 +26,7 @@ exports.verifyUser = async (req, res) => {
         const {email, password, mobile} = req.body;
 
         const user = await User.findOne({where:{email:email}});
-        console.log(user);
+        //console.log(user);
         
         if (user) {
             bcrypt.compare(password, user.password, (err, result) => {
