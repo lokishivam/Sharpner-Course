@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="chat.css">
+    <style>
+      .chat {
+        overflow-y: scroll;
+        height: 300px;
+      }
+      .chat-bubble {
+        display: inline-block;
+        max-width: 80%;
+        padding: 8px;
+        margin: 5px 0;
+        border-radius: 5px;
+        clear: both;
+      }
+      .chat-bubble-right {
+        float: right;
+        background-color: #007bff;
+        color: #fff;
+      }
+      .chat-bubble-left {
+        float: left;
+        background-color: #e4e4e4;
+      }
+      .center {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="bg-light p-4 text-center">
+        <h1>Chat App</h1>
+      </div>
+    </header>
+    
+    <div class="container-fluid">
+      <div class="row">
+        
+        <div class="col-sm-4">
+          <h2 class="center">Online Users</h2>
+          <div class="chat">
+            <ul class="list-group">
+              <li class="list-group-item">User 3</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-8">
+          <h2 class="center">Chats</h2>
+
+          <div class="chat bg-light rounded p-2">
+            <div class="chat-bubble chat-bubble-left">User 1: Not bad, you?</div>
+          </div>
+
+          <div class="input-group mt-3">
+            <input type="text" class="form-control" placeholder="Type your message...">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button">Send</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
