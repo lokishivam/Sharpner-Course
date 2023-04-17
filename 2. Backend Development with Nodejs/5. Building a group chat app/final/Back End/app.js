@@ -18,16 +18,24 @@ const sequelize = require('./util/database');
 //You need to import models on the app.js file so that they get synced and table is created,
 //If the model is indirectly getting imported, that is fine aswell. But good practice is to import it.
 const User = require('./models/user');
+const Message = require('./models/message');
 
 //import router to use it as middleware function.
 //order matters, first sequelize then userRouter, as User is indirectly imported via userRouter 
 const userRouter = require('./routers/user');
+const messageRouter = require('./routers/message');
 //----------------------------imports--------------
 
 app.use(bodyParser.json());
 
 
 app.use('/users', userRouter);
+app.use('/messages', messageRouter);
+
+
+
+User.hasMany(Message);
+Message.belongsTo(User);
 
 sequelize.sync() 
   .then((result) => {

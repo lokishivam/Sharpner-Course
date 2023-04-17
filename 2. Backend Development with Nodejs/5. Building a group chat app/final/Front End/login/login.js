@@ -24,7 +24,7 @@ async function formhandler(e) {
 
     localStorage.setItem("token", result.data.token); //storing the token in the localStorage.
 
-    //window.location.href = "../expenses/index.html";
+    window.location.href = "../chats/chat.html";
   } catch (err) {
     message.classList.remove("successMessage");
     if (err.response) {
