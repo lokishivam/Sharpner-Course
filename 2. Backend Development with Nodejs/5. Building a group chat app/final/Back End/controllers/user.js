@@ -28,23 +28,22 @@ exports.verifyUser = async (req, res) => {
         const user = await User.findOne({where:{email:email}});
         console.log(user);
         
-        bcrypt.compare(password, user.password, (err, result) => {
-            if (user) {
-                bcrypt.compare(password, user.password, (err, result) => {
-                  if (result) {
-                    return res
-                      .status(200)
-                      .json({ token: getToken(user.id) });
-                  } else {
-                    return res
-                      .status(401)
-                      .json({ errors: [{ message: "Incorrect password" }] });
-                  }
-                });
-            } else {
-                res.status(404).json({ errors: [{ message: "User dosent exists" }] });
-            }
-        });
+        if (user) {
+            bcrypt.compare(password, user.password, (err, result) => {
+                if (result) {
+                return res
+                    .status(200)
+                    .json({ token: getToken(user.id) });
+                } else {
+                return res
+                    .status(401)
+                    .json({ errors: [{ message: "Incorrect password" }] });
+                }
+            });
+        } else {
+            res.status(404).json({ errors: [{ message: "User dosent exists" }] });
+        }
+
     } catch (error) {
         console.log(error);
         res.status(404).json(error)

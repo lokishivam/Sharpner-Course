@@ -26,6 +26,7 @@ async function formhandler(e) {
 
     window.location.href = "../chats/chat.html";
   } catch (err) {
+    console.log(err.message);
     message.classList.remove("successMessage");
     if (err.response) {
       message.innerHTML = `Login Failed : ${err.response.data.errors[0].message}`;

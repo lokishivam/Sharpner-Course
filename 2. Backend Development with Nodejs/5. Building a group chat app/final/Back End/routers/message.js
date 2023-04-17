@@ -6,4 +6,6 @@ const messageConstroller = require('../controllers/message');
 
 router.post('/add-message', auth.authenticateUser ,messageConstroller.addMessage);
 
+router.get('/get-all-messages', auth.authenticateUser ,messageConstroller.getMessages);
+
 module.exports = router;
