@@ -29,6 +29,8 @@ async function getAllMessages(){
             headers: { token:token},
         });
         const messages = response.data;
+        // clear the displayMessages element before adding new messages
+        displayMessages.innerHTML = '';
         messages.forEach((message) => {
             const messageDiv = document.createElement('div');
             messageDiv.innerHTML = `${message.sender} : ${message.message}`
@@ -45,7 +47,9 @@ async function getAllMessages(){
         }
     }
 }
-getAllMessages();
+
+setInterval(getAllMessages,1000);//calls after every sec, setTimeOut calls after a sec but only once.
+
 
 messageForm.onsubmit = async (e) => {
     try {

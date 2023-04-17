@@ -15,7 +15,7 @@ exports.addMessage = async (req, res) => {
 exports.getMessages = async (req, res) => {
     try {
         const messages = await Message.findAll();
-        console.log('MMMMMMMMMMM',messages);
+        // console.log('MMMMMMMMMMM',messages);
         res.json(messages);
     } catch (error) {
         console.log(error);
