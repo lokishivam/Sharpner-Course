@@ -43,9 +43,7 @@ exports.forgotPasswordHandler = async (req, res) => {
       const sendEmailResponse = await apiInstance.sendTransacEmail(
         sendEmailRequest
       );
-      console.log("failed");
-
-      console.log(sendEmailResponse);
+      // console.log(sendEmailResponse);
 
       return res.json("Email sent successfully!");
     } else {
@@ -58,14 +56,17 @@ exports.forgotPasswordHandler = async (req, res) => {
   }
 };
 
+//The link to reset password should be allowed to use only once.
+//So we have the FpId i.e forgotpassword link id.
+//we will inactive the link after the user clicks(makes a call to resetPasswordHandler)
 exports.resetPasswordHandler = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id;//dynamic url to get id
 
     const FpRecord = await Forgotpassword.findOne({ where: { id } });
 
     if (FpRecord) {
-      console.log("1");
+      // console.log("1");
       if (!FpRecord.active) {
         return res.status(200).send(`<html>
                               <h1>Link expired<h1>
@@ -79,7 +80,7 @@ exports.resetPasswordHandler = async (req, res) => {
         //resulting in the ERR_HTTP_HEADERS_SENT error.
       }
 
-      console.log("2");
+      // console.log("2");
       await FpRecord.update({ active: false });
       //     res.status(200).send(`<html>
       //     <form onsubmit="reset(event); return false;">
@@ -114,6 +115,8 @@ exports.resetPasswordHandler = async (req, res) => {
   }
 };
 
+//when the form of update password is recieved by the user, 
+//I want to make sure that he uses the update password form only once.
 exports.updatePassword = async (req, res) => {
   try {
     const { newPassword } = req.query;
@@ -122,7 +125,7 @@ exports.updatePassword = async (req, res) => {
     const FpRecord = await Forgotpassword.findOne({
       where: { id: FpId },
     });
-    console.log(1);
+    // console.log(1);
     if (FpRecord.used) {
       return res
         .status(500)
