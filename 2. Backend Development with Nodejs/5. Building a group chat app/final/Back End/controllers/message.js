@@ -1,10 +1,12 @@
+const Group = require('../models/group');
 const Message = require('../models/message');
 
 exports.addMessage = async (req, res) => {
     try {
+        const groupId = req.params.groupId;
         const user =  req.user;
         const {message} = req.body;
-        await user.createMessage({sender:user.name, message:message});
+        await user.createMessage({sender:user.name, message:message, groupId:groupId});
         res.json({sucsess:true});
     } catch (error) {
         console.log(error);
@@ -14,7 +16,10 @@ exports.addMessage = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
     try {
-        const messages = await Message.findAll();
+        const groupId = req.params.groupId;
+        const group = await Group.findOne({where : {id : groupId}});
+        console.log(group);
+        const messages = await group.getMessages();
         // console.log('MMMMMMMMMMM',messages);
         res.json(messages);
     } catch (error) {

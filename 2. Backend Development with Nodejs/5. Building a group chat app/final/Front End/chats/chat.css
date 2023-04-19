@@ -1,3 +1,4 @@
+
 .chat {
   overflow-y: scroll;
   height: 300px;
@@ -21,4 +22,10 @@
 }
 .center {
   text-align: center;
+}
+.borders {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }

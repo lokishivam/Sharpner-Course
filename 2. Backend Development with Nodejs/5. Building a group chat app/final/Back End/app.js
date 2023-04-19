@@ -19,11 +19,14 @@ const sequelize = require('./util/database');
 //If the model is indirectly getting imported, that is fine aswell. But good practice is to import it.
 const User = require('./models/user');
 const Message = require('./models/message');
+const Group = require('./models/group');
+const GroupMembership = require('./models/groupMembership');
 
 //import router to use it as middleware function.
 //order matters, first sequelize then userRouter, as User is indirectly imported via userRouter 
 const userRouter = require('./routers/user');
 const messageRouter = require('./routers/message');
+const groupRouter = require('./routers/group');
 //----------------------------imports--------------
 
 app.use(bodyParser.json());
@@ -31,12 +34,20 @@ app.use(bodyParser.json());
 
 app.use('/users', userRouter);
 app.use('/messages', messageRouter);
-
+app.use('/groups', groupRouter);
 
 
 User.hasMany(Message);
 Message.belongsTo(User);
 
+
+Group.hasMany(Message);
+Message.belongsTo(Group);
+
+User.belongsToMany(Group, { through: GroupMembership });
+Group.belongsToMany(User, { through: GroupMembership });
+
+//sequelize.sync({force:true}) 
 sequelize.sync() 
   .then((result) => {
     //console.log(result);
