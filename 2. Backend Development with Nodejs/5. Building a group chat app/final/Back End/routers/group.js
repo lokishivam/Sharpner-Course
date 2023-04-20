@@ -10,6 +10,10 @@ router.post(
   groupController.createGroup
 );
 
-router.get("/get-all-groups", groupController.getAllGroups);
+router.get(
+  "/get-all-groups",
+  auth.authenticateUser,
+  groupController.getAllGroups
+);
 
 module.exports = router;

@@ -1,4 +1,3 @@
-const { Sequelize } = require("sequelize");
 const Group = require("../models/group");
 const User = require("../models/user");
 
@@ -7,7 +6,7 @@ exports.createGroup = async (req, res) => {
     const user = req.user;
     const { groupName } = req.body;
     const group = await Group.create({ name: groupName });
-    group.addUser(user, { through: { isAdmin: true } });
+    await group.addUser(user, { through: { isAdmin: true } });
     res.json(group);
   } catch (error) {
     console.log(error);
@@ -17,7 +16,7 @@ exports.createGroup = async (req, res) => {
 
 exports.getAllGroups = async (req, res) => {
   try {
-    const user = await User.findOne({ where: { id: 1 } });
+    const user = req.user;
     /*//getting groups through Group.frindAll()
     const groups = await Group.findAll({
       attributes: ["id", "name"],

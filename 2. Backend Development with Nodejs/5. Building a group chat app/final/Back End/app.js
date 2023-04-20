@@ -1,45 +1,44 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-//In an Express application, the app object is an instance of the Express module that 
-//provides a set of methods to define routes, configure middleware, 
+//In an Express application, the app object is an instance of the Express module that
+//provides a set of methods to define routes, configure middleware,
 //and handle HTTP requests and responses. The app object is the central part of an Express application,
 // and it's used to define the behavior of the server.
-const cors = require('cors');
+const cors = require("cors");
 
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
-//if a front end from a different origin e.g. 5500 is trying to access/make request to server running on 
+//if a front end from a different origin e.g. 5500 is trying to access/make request to server running on
 //different origin e.g. 3000, i have to give him the access because browsers implement cors policy.
- app.use(cors({origin: 'http://127.0.0.1:5500'}));
+app.use(cors({ origin: "http://127.0.0.1:5500" }));
 
-const sequelize = require('./util/database');
+const sequelize = require("./util/database");
 
 //**** Vimp
 //You need to import models on the app.js file so that they get synced and table is created,
 //If the model is indirectly getting imported, that is fine aswell. But good practice is to import it.
-const User = require('./models/user');
-const Message = require('./models/message');
-const Group = require('./models/group');
-const GroupMembership = require('./models/groupMembership');
+const User = require("./models/user");
+const Message = require("./models/message");
+const Group = require("./models/group");
+const GroupMembership = require("./models/groupMembership");
 
 //import router to use it as middleware function.
-//order matters, first sequelize then userRouter, as User is indirectly imported via userRouter 
-const userRouter = require('./routers/user');
-const messageRouter = require('./routers/message');
-const groupRouter = require('./routers/group');
+//order matters, first sequelize then userRouter, as User is indirectly imported via userRouter
+const userRouter = require("./routers/user");
+const messageRouter = require("./routers/message");
+const groupRouter = require("./routers/group");
+const adminRouter = require("./routers/admin");
 //----------------------------imports--------------
 
 app.use(bodyParser.json());
 
-
-app.use('/users', userRouter);
-app.use('/messages', messageRouter);
-app.use('/groups', groupRouter);
-
+app.use("/users", userRouter);
+app.use("/messages", messageRouter);
+app.use("/groups", groupRouter);
+app.use("/admin", adminRouter);
 
 User.hasMany(Message);
 Message.belongsTo(User);
-
 
 Group.hasMany(Message);
 Message.belongsTo(Group);
@@ -47,8 +46,9 @@ Message.belongsTo(Group);
 User.belongsToMany(Group, { through: GroupMembership });
 Group.belongsToMany(User, { through: GroupMembership });
 
-//sequelize.sync({force:true}) 
-sequelize.sync() 
+//sequelize.sync({force:true})
+sequelize
+  .sync()
   .then((result) => {
     //console.log(result);
     app.listen(3000);
