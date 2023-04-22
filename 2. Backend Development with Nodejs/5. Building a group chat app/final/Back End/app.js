@@ -10,7 +10,7 @@ const bodyParser = require("body-parser");
 
 //if a front end from a different origin e.g. 5500 is trying to access/make request to server running on
 //different origin e.g. 3000, i have to give him the access because browsers implement cors policy.
-app.use(cors({ origin: "http://127.0.0.1:5500" }));
+app.use(cors());
 
 const sequelize = require("./util/database");
 
@@ -28,6 +28,9 @@ const userRouter = require("./routers/user");
 const messageRouter = require("./routers/message");
 const groupRouter = require("./routers/group");
 const adminRouter = require("./routers/admin");
+
+//controllers
+const messageConstroller = require("./controllers/message");
 //----------------------------imports--------------
 
 app.use(bodyParser.json());
@@ -51,8 +54,31 @@ sequelize
   .sync()
   .then((result) => {
     //console.log(result);
-    app.listen(3000);
+    const server = app.listen(3000);
+    const io = require("./socket").init(server, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+      },
+    });
+
+    io.on("connection", (socket) => {
+      console.log(`User connected: ${socket.id}`);
+
+      // Handle socket events here
+      socket.on("joinRoom", (groupId, callback) => {
+        socket.join(groupId);
+        console.log(`User ${socket.id} joined room ${groupId}`);
+        callback(`You joined room ${groupId}`);
+      });
+
+      socket.on("sendMessage", (groupId, userId, message, callback) => {
+        messageConstroller.addMessage(groupId, userId, message, callback);
+      });
+    });
   })
   .catch((err) => {
     console.log(err);
   });
+
+//---------------------------------------------

@@ -12,7 +12,7 @@
 }
 .chat-bubble-right {
   float: right;
-  background-color: #00b7ff;
+  background-color: #272828a4;
   color: #fff;
 }
 .chat-bubble-left {
@@ -31,4 +31,11 @@
 
 .header {
   background-color: rgba(88, 225, 235, 0.226);
+}
+
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

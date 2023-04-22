@@ -1,3 +1,4 @@
+const socket = io("ws://localhost:3000");
 const messageForm = document.getElementById("messageForm");
 const displayMessages = document.getElementById("displayMessages");
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -7,8 +8,9 @@ const groupTitleParent = document.getElementById("groupTitleParent");
 const manageBtn = document.getElementById("manageBtn");
 const dummyDivManageBtn = document.getElementById("dummyDivManageBtn");
 let currentOpenGroupId = undefined;
+let currentOpenGroupOldestIndex = undefined;
 
-//------------------------Token-----------------------------------------------------------
+//------------------------------Token------------------------------------
 const token = localStorage.getItem("token");
 const decodedToken = parseJwt(token);
 const myId = decodedToken.id;
@@ -32,8 +34,26 @@ function parseJwt(token) {
 //_____________________________________________________________________________________________
 //                                   Messages
 
+//setting an eventListner for recieving a message from the group
+try {
+  socket.on("recieveMessage", (groupId, message) => {
+    console.log("recieved a message >>>>> ", message, groupId);
+    // console.log(typeof groupId); groupId is string through out.
+    if (message && groupId === currentOpenGroupId) {
+      console.log("doneeee");
+      displayAMessageOnChatBox(message);
+    }
+  });
+} catch (error) {
+  console.log(error00);
+  alert(error);
+}
+
+//
+//get all the messages of the current group at once.**we are not using this.
 async function getAllMessages() {
   try {
+    //create new promise
     const response = await axios.get(
       `http://localhost:3000/messages/get-all-messages/${currentOpenGroupId}`,
       {
@@ -43,7 +63,10 @@ async function getAllMessages() {
     const messages = response.data;
     // clear the displayMessages element before adding new messages
     displayMessages.innerHTML = "";
-    displayMsg(messages);
+
+    messages.forEach((message) => {
+      displayAMessageOnChatBox(message);
+    });
   } catch (error) {
     console.log(error);
     if (error.response) {
@@ -54,33 +77,47 @@ async function getAllMessages() {
   }
 }
 
-async function getRecentMessages() {
+async function getOlderMessages() {
   try {
-    //get older chats
-    const olderChats = JSON.parse(localStorage.getItem("olderChats"));
-    console.log("olderChats = ", olderChats);
-    //we want the recent chat, i.e. after the olderChat ends
-    const from =
-      1 + (olderChats.length === 0 ? 0 : olderChats[olderChats.length - 1].id);
-    console.log("from = ", from);
-    //get the recent messages
     const response = await axios.get(
-      `http://localhost:3000/messages/get-recent-messages/?from=${from}`,
+      `http://localhost:3000/messages/get-recent-messages/?oldestMessageLoaded=${currentOpenGroupOldestIndex}&groupId=${currentOpenGroupId}`,
       {
         headers: { token: token },
       }
     );
-    const recentChats = response.data;
-    //combine both the chats to display the final chats
-    let finalChats = [...olderChats, ...recentChats];
+    const messages = response.data.messages;
+    const oldestMessageSentIndex = response.data.oldestMessageSentIndex;
+    console.log(messages);
+    messages.reverse().forEach((message) => {
+      const messageDiv = document.createElement("div");
+      messageDiv.innerHTML = `${message.sender} : ${message.message}`;
+      messageDiv.classList.add("chat-bubble");
+      messageDiv.classList.add(
+        message.userId === myId ? "chat-bubble-right" : "chat-bubble-left"
+      );
+      displayMessages.insertBefore(messageDiv, displayMessages.firstChild);
+    });
+    // console.log(messages);
 
-    displayMessages.innerHTML = "";
-    displayMsg(finalChats);
+    if (messages.length > 0) {
+      currentOpenGroupOldestIndex = oldestMessageSentIndex; //update the oldermessage.
+      console.log("oldest message : ", currentOpenGroupOldestIndex);
+      if (currentOpenGroupOldestIndex > 0) {
+        const loadMoreButton = document.createElement("button");
+        loadMoreButton.textContent = "Load More Messages";
+        loadMoreButton.classList.add("btn", "btn-primary");
 
-    if (finalChats.length > 10) {
-      finalChats = finalChats.slice(-10);
+        // Create the div element to hold the button
+        const loadMoreDiv = document.createElement("div");
+        loadMoreDiv.classList.add("load-more");
+        loadMoreDiv.appendChild(loadMoreButton);
+        displayMessages.insertBefore(loadMoreDiv, displayMessages.firstChild);
+        loadMoreButton.addEventListener("click", () => {
+          getOlderMessages();
+          loadMoreDiv.remove();
+        });
+      }
     }
-    localStorage.setItem("olderChats", JSON.stringify(finalChats));
   } catch (error) {
     console.log(error);
     if (error.response) {
@@ -91,33 +128,44 @@ async function getRecentMessages() {
   }
 }
 
-function displayMsg(messages) {
-  messages.forEach((message) => {
-    const messageDiv = document.createElement("div");
-    messageDiv.innerHTML = `${message.sender} : ${message.message}`;
-    messageDiv.classList.add("chat-bubble");
-    messageDiv.classList.add(
-      message.userId === myId ? "chat-bubble-right" : "chat-bubble-left"
-    );
-    displayMessages.append(messageDiv);
-  });
+//
+
+//display single message on the current chatBOX
+function displayAMessageOnChatBox(message) {
+  const messageDiv = document.createElement("div");
+  messageDiv.innerHTML = `${message.sender} : ${message.message}`;
+  messageDiv.classList.add("chat-bubble");
+  messageDiv.classList.add(
+    message.userId === myId ? "chat-bubble-right" : "chat-bubble-left"
+  );
+  displayMessages.append(messageDiv);
+  displayMessages.scrollTop = displayMessages.scrollHeight;
 }
 
-//getRecentMessages();
 //
-//getAllMessages();
-//setInterval(getAllMessages,1000);//calls after every sec, setTimeOut calls after a sec but only once.
 
 //send message Forms
 messageForm.onsubmit = async (e) => {
   try {
     e.preventDefault();
     const message = e.target.message.value;
-    await axios.post(
-      `http://localhost:3000/messages/add-message/${currentOpenGroupId}`,
-      { message: message },
-      {
-        headers: { token: token },
+    // await axios.post(
+    //   `http://localhost:3000/messages/add-message/${currentOpenGroupId}`,
+    //   { message: message },
+    //   {
+    //     headers: { token: token },
+    //   }
+    // );
+    socket.emit(
+      "sendMessage",
+      currentOpenGroupId,
+      myId,
+      message,
+      (response, error) => {
+        console.log(response);
+        if (error) {
+          alert(response);
+        }
       }
     );
 
@@ -135,6 +183,7 @@ messageForm.onsubmit = async (e) => {
 //___________________________________________________________________________________________________
 //                                          Groups
 
+//
 createGroupBtn.addEventListener("click", async () => {
   try {
     const groupNameInput = document.getElementById("groupNameInput");
@@ -152,6 +201,7 @@ createGroupBtn.addEventListener("click", async () => {
     );
     const groupId = response.data.id;
     currentOpenGroupId = groupId;
+    currentOpenGroupOldestIndex = undefined;
     //on the UI, add this group to the groups list
 
     appendLiToGroupList(groupId, groupName, true);
@@ -161,6 +211,10 @@ createGroupBtn.addEventListener("click", async () => {
     groupTitle.classList.remove("bg-danger");
     groupTitle.classList.add("bg-warning");
     groupNameInput.value = "";
+
+    socket.emit("joinRoom", currentOpenGroupId, (message) => {
+      console.log(message);
+    });
   } catch (error) {
     console.log(error);
     if (error.response) {
@@ -205,30 +259,49 @@ getAllGroups();
 //add try catch
 //SELCET a group to chat
 groupList.addEventListener("click", async (e) => {
-  if (e.target.classList.contains("list-group-item")) {
-    const groupId = e.target.id;
-    currentOpenGroupId = groupId; //very imp to get correct messages in your messages box
-    displayMessages.innerHTML = "";
-    groupTitle.innerHTML = e.target.textContent;
-    groupTitleParent.classList.remove("bg-danger");
-    groupTitleParent.classList.add("bg-warning");
-    const adminLogo = document.getElementById("adminLogo");
-    const isAdmin =
-      e.target.dataset.isAdmin === "false"
-        ? false
-        : e.target.dataset.isAdmin === "true";
-    if (isAdmin) {
-      adminLogo.textContent = "admin";
-      adminLogo.classList.add("bg-info", "text-white", "p-2");
-      dummyDivManageBtn.style.display = "none";
-      manageBtn.style.display = "block";
-    } else {
-      adminLogo.classList.remove("bg-info", "text-white", "p-2");
-      adminLogo.textContent = "";
-      dummyDivManageBtn.style.display = "block";
-      manageBtn.style.display = "none";
+  try {
+    if (e.target.classList.contains("list-group-item")) {
+      const groupId = e.target.id;
+
+      currentOpenGroupId = groupId; //very imp to get correct messages in your messages box
+      currentOpenGroupOldestIndex = undefined;
+
+      displayMessages.innerHTML = "";
+      groupTitle.innerHTML = e.target.textContent;
+      groupTitleParent.classList.remove("bg-danger");
+      groupTitleParent.classList.add("bg-warning");
+      const adminLogo = document.getElementById("adminLogo");
+      const isAdmin =
+        e.target.dataset.isAdmin === "false"
+          ? false
+          : e.target.dataset.isAdmin === "true";
+      if (isAdmin) {
+        adminLogo.textContent = "admin";
+        adminLogo.classList.add("bg-info", "text-white", "p-2");
+        dummyDivManageBtn.style.display = "none";
+        manageBtn.style.display = "block";
+      } else {
+        adminLogo.classList.remove("bg-info", "text-white", "p-2");
+        adminLogo.textContent = "";
+        dummyDivManageBtn.style.display = "block";
+        manageBtn.style.display = "none";
+      }
+
+      await getOlderMessages();
+      displayMessages.scrollTop = displayMessages.scrollHeight;
+      //socket.io, joining to a group on the io instance of the server
+      //joining the  group after you retrive the older messages.
+      socket.emit("joinRoom", currentOpenGroupId, (message) => {
+        console.log(message);
+      });
     }
-    getAllMessages(); //I let it work async, i.e without await, as the messages will be printed by that function
+  } catch (error) {
+    console.log(error);
+    if (error.response) {
+      alert(error.response.data.message);
+    } else {
+      alert(error);
+    }
   }
 });
 
@@ -261,6 +334,7 @@ document.getElementById("closeBtn").addEventListener("click", function () {
 
 //___________________________________________________________________________
 //FORM HANDLING FOR ADMIN ACTIONS
+
 const adminResult = document.getElementById("adminResult");
 
 const addUserModalFormBtn = document.getElementById("addUserModalForm");
