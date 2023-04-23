@@ -15,9 +15,10 @@ const Message = sequelize.define("message", {
   },
   message: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
-
+  imageLink: {
+    type: Sequelize.STRING,
+  },
 });
 
 module.exports = Message; //User model is exported

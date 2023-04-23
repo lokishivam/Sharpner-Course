@@ -1,6 +1,6 @@
 .chat {
   overflow-y: scroll;
-  height: 300px;
+  height: 347px;
 }
 .chat-bubble {
   display: inline-block;
@@ -12,7 +12,7 @@
 }
 .chat-bubble-right {
   float: right;
-  background-color: #272828a4;
+  background-color: #573277a4;
   color: #fff;
 }
 .chat-bubble-left {
@@ -30,7 +30,7 @@
 }
 
 .header {
-  background-color: rgba(88, 225, 235, 0.226);
+  background-color: #2b0742e7;
 }
 
 .load-more {
@@ -38,4 +38,28 @@
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.image {
+  max-width: 300px;
+}
+
+.float-right {
+  float: right;
+  clear: both;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  margin-top: 8px;
+}
+
+.float-left {
+  float: left;
+  clear: both;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.groupTitleColor {
+  background-color: #9648cb;
 }

@@ -9,11 +9,15 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="chat.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
     <header>
       <div class="header p-3 text-center">
-        <h1>Group Chat App</h1>
+        <h1 style="color: #9cb1c3">Group Chat App</h1>
       </div>
     </header>
 
@@ -22,7 +26,7 @@
         <!-- groups column -->
         <div class="col-sm-4">
           <h2 class="center bg-info p-1">Groups</h2>
-          <div class="chat bg-light rounded borders">
+          <div class="chat bg-dark rounded borders">
             <ul class="list-group" id="groupList"></ul>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-3">
@@ -96,7 +100,7 @@
 
         <!-- chats column -->
         <div class="col-sm-8" id="chatCol">
-          <h2 class="center bg-info p-1">Chats</h2>
+          <!-- <h2 class="center bg-info p-1">Chats</h2> -->
 
           <div
             class="d-flex justify-content-between align-items-center bg-danger p-2"
@@ -116,11 +120,11 @@
 
           <div
             id="displayMessages"
-            class="chat bg-light rounded p-2 borders"
+            class="chat bg-dark rounded p-2 borders"
           ></div>
 
           <form id="messageForm" class="mb-3">
-            <div class="input-group mt-3">
+            <div class="input-group mt-2">
               <input
                 type="text"
                 name="message"
@@ -128,6 +132,17 @@
                 placeholder="Type your message..."
               />
               <div class="input-group-append">
+                <span class="input-group-text">
+                  <label for="file-input">
+                    <i class="fa fa-paperclip" aria-hidden="true"></i>
+                  </label>
+                  <input
+                    type="file"
+                    id="file-input"
+                    class="d-none"
+                    accept="image/*"
+                  />
+                </span>
                 <button class="btn btn-primary" type="submit">Send</button>
               </div>
             </div>
@@ -139,7 +154,7 @@
           <div class="d-flex align-items-center justify-content-center mb-3">
             <button class="btn btn-primary" id="closeBtn">Close</button>
           </div>
-          <div class="bg-light rounded p-2 borders">
+          <div class="bg-dark rounded p-2 borders">
             <div class="list-group list-group-flush">
               <button
                 type="button"

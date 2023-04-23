@@ -6,12 +6,6 @@ const messageConstroller = require("../controllers/message");
 
 //router.post('/add-message/:groupId', auth.authenticateUser ,messageConstroller.addMessage);
 
-router.get(
-  "/get-all-messages/:groupId",
-  auth.authenticateUser,
-  messageConstroller.getMessages
-);
-
 router.get("/get-recent-messages", messageConstroller.getRecentMessages);
 
 module.exports = router;

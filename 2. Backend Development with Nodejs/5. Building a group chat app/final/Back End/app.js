@@ -49,12 +49,12 @@ Message.belongsTo(Group);
 User.belongsToMany(Group, { through: GroupMembership });
 Group.belongsToMany(User, { through: GroupMembership });
 
-//sequelize.sync({force:true})
 sequelize
+  //.sync({ force: true })
   .sync()
   .then((result) => {
-    //console.log(result);
     const server = app.listen(3000);
+
     const io = require("./socket").init(server, {
       cors: {
         origin: "*",
@@ -74,6 +74,10 @@ sequelize
 
       socket.on("sendMessage", (groupId, userId, message, callback) => {
         messageConstroller.addMessage(groupId, userId, message, callback);
+      });
+
+      socket.on("image-upload", (groupId, userId, dataUrl, callback) => {
+        messageConstroller.addImage(groupId, userId, dataUrl, callback);
       });
     });
   })

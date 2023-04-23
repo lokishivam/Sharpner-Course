@@ -35,47 +35,18 @@ function parseJwt(token) {
 //                                   Messages
 
 //setting an eventListner for recieving a message from the group
-try {
-  socket.on("recieveMessage", (groupId, message) => {
-    console.log("recieved a message >>>>> ", message, groupId);
-    // console.log(typeof groupId); groupId is string through out.
-    if (message && groupId === currentOpenGroupId) {
-      console.log("doneeee");
-      displayAMessageOnChatBox(message);
-    }
-  });
-} catch (error) {
-  console.log(error00);
-  alert(error);
-}
-
-//
-//get all the messages of the current group at once.**we are not using this.
-async function getAllMessages() {
+socket.on("recieveMessage", (groupId, message) => {
   try {
-    //create new promise
-    const response = await axios.get(
-      `http://localhost:3000/messages/get-all-messages/${currentOpenGroupId}`,
-      {
-        headers: { token: token },
-      }
-    );
-    const messages = response.data;
-    // clear the displayMessages element before adding new messages
-    displayMessages.innerHTML = "";
-
-    messages.forEach((message) => {
-      displayAMessageOnChatBox(message);
-    });
+    if (message && groupId === currentOpenGroupId) {
+      const messageDiv = displayAMessageOnChatBox(message);
+      displayMessages.append(messageDiv);
+      displayMessages.scrollTop = displayMessages.scrollHeight;
+    }
   } catch (error) {
     console.log(error);
-    if (error.response) {
-      alert(error.response.data.message);
-    } else {
-      alert(error);
-    }
+    alert(error);
   }
-}
+});
 
 async function getOlderMessages() {
   try {
@@ -89,12 +60,7 @@ async function getOlderMessages() {
     const oldestMessageSentIndex = response.data.oldestMessageSentIndex;
     console.log(messages);
     messages.reverse().forEach((message) => {
-      const messageDiv = document.createElement("div");
-      messageDiv.innerHTML = `${message.sender} : ${message.message}`;
-      messageDiv.classList.add("chat-bubble");
-      messageDiv.classList.add(
-        message.userId === myId ? "chat-bubble-right" : "chat-bubble-left"
-      );
+      const messageDiv = displayAMessageOnChatBox(message);
       displayMessages.insertBefore(messageDiv, displayMessages.firstChild);
     });
     // console.log(messages);
@@ -128,18 +94,26 @@ async function getOlderMessages() {
   }
 }
 
-//
-
 //display single message on the current chatBOX
 function displayAMessageOnChatBox(message) {
   const messageDiv = document.createElement("div");
-  messageDiv.innerHTML = `${message.sender} : ${message.message}`;
-  messageDiv.classList.add("chat-bubble");
-  messageDiv.classList.add(
-    message.userId === myId ? "chat-bubble-right" : "chat-bubble-left"
-  );
-  displayMessages.append(messageDiv);
-  displayMessages.scrollTop = displayMessages.scrollHeight;
+  if (message.message) {
+    messageDiv.innerHTML = `${
+      message.userId === myId ? "You" : message.sender
+    } : ${message.message}`;
+    messageDiv.classList.add("chat-bubble");
+    messageDiv.classList.add(
+      message.userId === myId ? "chat-bubble-right" : "chat-bubble-left"
+    );
+  } else {
+    const img = document.createElement("img");
+    img.classList.add("image");
+    img.classList.add(message.userId === myId ? "float-right" : "float-left");
+    img.src = message.imageLink;
+    messageDiv.appendChild(img);
+  }
+
+  return messageDiv;
 }
 
 //
@@ -149,27 +123,61 @@ messageForm.onsubmit = async (e) => {
   try {
     e.preventDefault();
     const message = e.target.message.value;
-    // await axios.post(
-    //   `http://localhost:3000/messages/add-message/${currentOpenGroupId}`,
-    //   { message: message },
-    //   {
-    //     headers: { token: token },
-    //   }
-    // );
-    socket.emit(
-      "sendMessage",
-      currentOpenGroupId,
-      myId,
-      message,
-      (response, error) => {
-        console.log(response);
-        if (error) {
-          alert(response);
-        }
-      }
-    );
+    const fileInput = document.getElementById("file-input");
 
-    e.target.message.value = "";
+    if (currentOpenGroupId == undefined) {
+      e.target.message.value = "";
+      console.log("message=", message);
+      fileInput.value = null;
+      throw new Error("Error: select a group");
+    }
+
+    if (message === "") {
+      //file selected
+
+      console.log(fileInput.value);
+      const file = fileInput.files[0]; // get the selected file
+
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file); // read the file as a data URL
+
+        reader.onload = () => {
+          const dataUrl = reader.result;
+          socket.emit(
+            "image-upload",
+            currentOpenGroupId,
+            myId,
+            dataUrl,
+            (response, error) => {
+              console.log(response);
+              if (error) {
+                throw new Error(error);
+              }
+            }
+          ); // send the data URL to the server
+          fileInput.value = null;
+        };
+      } else {
+        throw new Error("Enter a message or select a file");
+      }
+    } else {
+      //message
+      socket.emit(
+        "sendMessage",
+        currentOpenGroupId,
+        myId,
+        message,
+        (response, error) => {
+          console.log(response);
+          if (error) {
+            throw new Error(error);
+          }
+        }
+      );
+
+      e.target.message.value = "";
+    }
   } catch (error) {
     console.log(error);
     if (error.response) {
@@ -208,8 +216,8 @@ createGroupBtn.addEventListener("click", async () => {
 
     displayMessages.innerHTML = "";
     groupTitle.innerHTML = groupName;
-    groupTitle.classList.remove("bg-danger");
-    groupTitle.classList.add("bg-warning");
+    groupTitleParent.classList.remove("bg-danger"); //_________________________________________=+===========
+    groupTitleParent.classList.add("groupTitleColor");
     groupNameInput.value = "";
 
     socket.emit("joinRoom", currentOpenGroupId, (message) => {
@@ -242,16 +250,25 @@ function appendLiToGroupList(groupId, groupName, isAdmin) {
 
 //add try catch
 async function getAllGroups() {
-  const response = await axios.get(
-    "http://localhost:3000/groups/get-all-groups",
-    {
-      headers: { token: token },
+  try {
+    const response = await axios.get(
+      "http://localhost:3000/groups/get-all-groups",
+      {
+        headers: { token: token },
+      }
+    );
+    const groups = response.data;
+    groups.forEach((group) => {
+      appendLiToGroupList(group.id, group.name, group.groupMembership.isAdmin);
+    });
+  } catch (error) {
+    console.log(error);
+    if (error.response) {
+      alert(error.response.data.message);
+    } else {
+      alert(error);
     }
-  );
-  const groups = response.data;
-  groups.forEach((group) => {
-    appendLiToGroupList(group.id, group.name, group.groupMembership.isAdmin);
-  });
+  }
 }
 
 getAllGroups();
@@ -269,15 +286,15 @@ groupList.addEventListener("click", async (e) => {
       displayMessages.innerHTML = "";
       groupTitle.innerHTML = e.target.textContent;
       groupTitleParent.classList.remove("bg-danger");
-      groupTitleParent.classList.add("bg-warning");
+      groupTitleParent.classList.add("groupTitleColor");
       const adminLogo = document.getElementById("adminLogo");
       const isAdmin =
         e.target.dataset.isAdmin === "false"
           ? false
           : e.target.dataset.isAdmin === "true";
       if (isAdmin) {
-        adminLogo.textContent = "admin";
-        adminLogo.classList.add("bg-info", "text-white", "p-2");
+        adminLogo.textContent = "Admin";
+        adminLogo.classList.add("bg-warning", "text-black", "p-2");
         dummyDivManageBtn.style.display = "none";
         manageBtn.style.display = "block";
       } else {
