@@ -68,6 +68,7 @@ exports.getRecentMessages = async (req, res) => {
   }
 };
 
+//addImage
 exports.addImage = async (groupId, userId, dataUrl, callback) => {
   try {
     const io = require("../socket").getIO();
@@ -123,3 +124,33 @@ const uploadToS3 = async (data, fileName) => {
     console.log(error);
   }
 };
+
+//cron package to delete older messages
+async function deleteOldMessages() {
+  try {
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // subtract 24 hours in milliseconds
+    await Message.destroy({
+      where: {
+        createdAt: {
+          [Op.lt]: oneDayAgo, //**
+        },
+      },
+    });
+    console.log("Old messages deleted successfully");
+  } catch (error) {
+    console.error("Error deleting old messages:", error);
+  }
+}
+
+const CronJob = require("cron").CronJob;
+const job = new CronJob(
+  "0 1 * * *",
+  function () {
+    deleteOldMessages();
+  },
+  null,
+  true,
+  "America/New_York" //**
+);
+
+job.start();
