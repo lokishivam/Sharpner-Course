@@ -20,26 +20,17 @@ class User {
   }
   static findById(userId) {
     const db = getDb();
-    db.collection("users")
+    return db
+      .collection("users")
       .findOne({ _id: new mongodb.ObjectId(userId) })
       .then((result) => {
-        console.log(result);
+        // console.log(result);
+        return result;
       })
       .catch((err) => {
         console.log(err);
       });
   }
 }
-
-// const User = sequelize.define('user', {
-//   id: {
-//     type: Sequelize.INTEGER,
-//     autoIncrement: true,
-//     allowNull: false,
-//     primaryKey: true
-//   },
-//   name: Sequelize.STRING,
-//   email: Sequelize.STRING
-// });
 
 module.exports = User;
