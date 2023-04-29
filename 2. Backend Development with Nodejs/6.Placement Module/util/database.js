@@ -20,7 +20,7 @@ exports.mongoConnect = (callback) => {
 
 exports.getDb = () => {
   if (_db) {
-    return db;
+    return _db;
     //the client object is used to access databases and collections within the instance.
   }
   throw new Error("no connection found");

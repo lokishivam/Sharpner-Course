@@ -1,4 +1,4 @@
-const Person = require("../models/product");
+const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
@@ -15,7 +15,15 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
 
   const product = new Product(title, imageUrl, price, description);
-  product.save();
+  product
+    .save()
+    .then((result) => {
+      console.log("saved");
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      console.log(err);
+    }); //chain it further
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -64,8 +72,7 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  req.user
-    .getProducts()
+  Product.fetchAll()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
