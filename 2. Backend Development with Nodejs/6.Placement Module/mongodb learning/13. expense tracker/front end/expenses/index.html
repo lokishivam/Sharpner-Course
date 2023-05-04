@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense tracker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <button type="button" class="nonPremium" id="premiumBtn">
+        Buy Premium
+      </button>
+      <h1>Expense tracker</h1>
+      <div></div>
+    </header>
+
+    <section class="container">
+      <form id="my-form" class="form">
+        <h1>Add Expense</h1>
+
+        <label for="amount">Expense Amount:</label>
+        <input type="text" id="amount" name="amount" required />
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required />
+
+        <label for="categoty">Categoty:</label>
+        <select id="categoty" name="category">
+          <option value="food">Food</option>
+          <option value="Travel">Travel</option>
+          <option value="Rent">Rent</option>
+        </select>
+
+        <input type="submit" value="Add Expense" class="btn" id="submitBtn" />
+      </form>
+      <!-- <div style="display: inline-block"> -->
+      <div class="expense">
+        <h1>Expenses</h1>
+
+        <ul id="expenseList"></ul>
+
+        <div class="paginate" id="expenseListPaginateButtons"></div>
+
+        <div id="paginatelimit">
+          <label for="pageLimit">Rows per Page:</label>
+          <select id="pageLimit">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="leadershipSection" id="leadershipSection">
+        <button type="button" class="leadershipBtn" id="leadershipBtn">
+          Leadership Board
+        </button>
+        <ul id="leadershipList"></ul>
+      </div>
+      <!-- </div> -->
+
+      <div class="DownloadSection">
+        <button onclick="download()" id="downloadExpense" class="btn">
+          Download current expenses
+        </button>
+        <ul id="downloadList"></ul>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
